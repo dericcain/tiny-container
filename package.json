@@ -1,6 +1,27 @@
 {
   "name": "tiny-container",
   "version": "0.1.0",
+  "description": "A very small (~500B) IoC Container the is easy to use and makes all your dreams come true",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dericgw/tiny-container.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dericgw/tiny-container/issues"
+  },
+  "homepage": "https://github.com/dericgw/tiny-container",
+  "license": "MIT",
+  "keywords": [
+    "container",
+    "dependency injection",
+    "inversion container",
+    "ioc container",
+    "react container",
+    "react dependency injection",
+    "injection",
+    "constructor injection",
+    "dependency container"
+  ],
   "main": "dist/index.js",
   "module": "dist/tiny-container.esm.js",
   "typings": "dist/index.d.ts",
@@ -12,7 +33,9 @@
     "coveralls": "npm run test -- --coverage && cat ./coverage/lcov.info | coveralls",
     "build": "tsdx build",
     "test": "tsdx test",
-    "lint": "tsdx lint"
+    "lint": "tsdx lint",
+    "preversion": "npm run build",
+    "release": "np"
   },
   "peerDependencies": {},
   "husky": {
@@ -30,6 +53,7 @@
     "@types/jest": "^24.0.18",
     "coveralls": "^3.0.6",
     "husky": "^3.0.4",
+    "np": "^5.0.3",
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1",
     "tsdx": "^0.9.0",
