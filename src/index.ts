@@ -17,10 +17,6 @@ interface Services extends Map<string, ServiceAndDependencies<any>> {
   get<T>(name: string): T;
 }
 
-// This is a simple IoC Container that takes care of dependency injection for us so that our
-// code stays nice and loosely coupled.
-//
-// @see ./src/bootstrap.ts for an example of how this works
 export default class Container implements IContainer {
   // All services here will not be instantiated until they are retrieved
   private services: Services;
