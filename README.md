@@ -322,6 +322,15 @@ render(
 
 Open up an issue if you find one. If you can provide a reproduction, then please do. You can use [codesandbox.io](codesandbox.io) for this.
 
+## Contributing
+
+Every merge into master will publish a new release to NPM. In order to know which version should be should be published,
+i.e., patch, minor, major, this repo uses keywords in the git commits.
+
+- No keyword - patch
+- "feat" or "feature" - minor
+- "BREAKING CHANGES" - major
+
 ## License (MIT)
 
 [Check it out here.](./LICENSE.md)
