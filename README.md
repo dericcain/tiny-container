@@ -1,4 +1,5 @@
 # Tiny Container
+[![Coverage Status](https://coveralls.io/repos/github/dericgw/tiny-container/badge.svg?branch=master)](https://coveralls.io/github/dericgw/tiny-container?branch=master)
 
 🚦 A very small (~500B) IoC Container the is easy to use and makes all your dreams come true
 
@@ -123,7 +124,7 @@ const container = new Container();
 // so it may be a good idea to create a "const" or "enum" with the names 
 // (I'll show an example later)
 container.register('apiService', ApiService);
-conatiner.register('fileService', FileService);
+container.register('fileService', FileService);
 
 // Notice the third parameter and how I am using the same names as I did previously. 
 // That is important. Now, our "Store" will have access to both the "apiService" and
@@ -164,4 +165,136 @@ export default class Store {
 }
 ```
 
-# More examples coming within the next day or two...
+## Recipes
+### Defining Service Names
+Since the names of the services are important, it is a good idea to use an exported `const` or an
+`enum` with the names:
+
+```js
+import Container from 'tiny-container';
+
+import ApiService from '../services/api';
+import FileService from '../services/file';
+import Store from '../stores';
+
+const container = new Container();
+
+// Use this wherever you register or retrieve your service
+export const SERVICES = {
+  apiService: 'apiService',
+  fileService: 'fileService',
+  store: 'store'
+};
+
+container.register(SERVICES.apiService, ApiService);
+container.register(SERVICES.fileService, FileService);
+container.singleton(SERVICES.store, Store, [SERVICES.apiService, SERVICES.fileService]);
+
+export default container;
+```
+
+In Typescript:
+
+```typescript
+import Container from 'tiny-container';
+
+import ApiService from '../services/api';
+import FileService from '../services/file';
+import Store from '../stores';
+
+const container = new Container();
+
+// Use this wherever you register or retrieve your service
+export enum SERVICES {
+  ApiService = 'apiService',
+  FileService = 'fileService',
+  Store = 'store'
+};
+
+container.register(SERVICES.ApiService, ApiService);
+container.register(SERVICES.FileService, FileService);
+container.singleton(SERVICES.Store, Store, [SERVICES.ApiService, SERVICES.FileService]);
+
+export default container;
+```
+
+### Connecting MobX stores
+Tiny Container is perfect for MobX and hooking up the stores and their dependencies. This is where
+the idea of this library started.
+
+`src/services/api.js`
+```js
+export default class ApiService {
+  get() {
+    // Could be a GET fetch call
+  }
+  
+  post() {
+    // Could be a POST fetch call
+  }
+}
+```
+
+`src/bootstrap.js`
+```js
+import Container from 'tiny-container';
+
+import ApiService from '../services/api';
+import UserStore from './stores/user';
+
+const container = new Container();
+
+container.register('apiService', ApiService);
+container.singleton('userStore', UserStore, ['apiService']);
+
+export default container;
+```
+
+`src/stores/user.js`
+```js
+export default class UserStore {
+  constructor({ rootStore, apiService }) {
+    // We need access to our root store so we can talk to other stores
+    this.rootStore = rootStore;
+    // We have access to the apiService because of our bootstrap file above
+    this.apiService = apiService;
+  }
+}
+```
+
+`src/stores/root.js`
+```js
+export default class RootStore {
+  constructor() {
+    // Pass in the root store as a dependency to the get method so it is injected in the constructor
+    // of our UserStore
+    this.userStore = container.get('userStore', { rootStore: this });
+  }
+}
+```
+
+`src/index.jsx`
+```jsx harmony
+import React from 'react';
+import { render } from 'ReactDOM';
+import { Provider } from 'mobx-react';
+
+import App from './app';
+import RootStore from './stores/root';
+
+// We don't add the RootStore to the container because we do not want to create a cyclic dependency
+// since we need to use the container in the RootStore to resolve the other stores
+const store = new RootStore();
+
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+, document.getElementById('root'));
+```
+
+## Issues
+Open up an issue if you find one. If you can provide a reproduction, then please do. You can use [codesandbox.io](codesandbox.io) for this.
+
+## License (MIT)
+[Check it out here.](./LICENSE.md)

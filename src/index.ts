@@ -52,6 +52,12 @@ export default class Container implements IContainer {
 
     const service = this.services.get<T>(name);
 
+    if (!service) {
+      throw new Error(
+        `Cannot find "${name}" in your services. Are you sure it is registered and spelled correctly?`
+      );
+    }
+
     // @ts-ignore - Need to fix this...
     if (service.singleton) {
       const newSingletonInstance = this.createInstance(service, additionalDeps);
@@ -65,16 +71,19 @@ export default class Container implements IContainer {
   private getResolvedDependencies(service: any) {
     return service.dependencies
       ? service.dependencies.reduce(
-        (deps: any, name: string) => ({
-          ...deps,
-          [name]: this.get(name),
-        }),
-        {},
-      )
+          (deps: any, name: string) => ({
+            ...deps,
+            [name]: this.get(name),
+          }),
+          {}
+        )
       : {};
   }
 
   private createInstance(service: any, otherArgs: any) {
-    return new service.definition({ ...this.getResolvedDependencies(service), ...otherArgs });
+    return new service.definition({
+      ...this.getResolvedDependencies(service),
+      ...otherArgs,
+    });
   }
 }

@@ -4,9 +4,11 @@ class MockDep {}
 
 class MockService {
   mockDep: any;
+  additionalDep: any;
 
-  constructor({ mockDep }: any) {
+  constructor({ mockDep, additionalDep }: any) {
     this.mockDep = mockDep;
+    this.additionalDep = additionalDep;
   }
 }
 
@@ -42,5 +44,18 @@ describe('IoC Container', () => {
     const serviceA = container.get('mockService');
     const serviceB = container.get('mockService');
     expect(serviceA.mockDep).toBe(serviceB.mockDep);
+  });
+
+  it('should allow dependencies to be passed into the "get" method', () => {
+    const additionalDep = {};
+    const container = new Container();
+    container.register('mockService', MockService);
+    const service = container.get('mockService', { additionalDep });
+    expect(service.additionalDep).toBe(additionalDep);
+  });
+
+  it('should throw if an unknown service is attempted to be retrieved', () => {
+    const container = new Container();
+    expect(() => container.get('something')).toThrow();
   });
 });
