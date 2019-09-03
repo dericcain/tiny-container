@@ -1,4 +1,4 @@
-import Container from '../src';
+import { Container } from '../src';
 
 class MockDep {}
 
