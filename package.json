@@ -1,6 +1,6 @@
 {
   "name": "tiny-container",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A very small (~500B) IoC Container the is easy to use and makes all your dreams come true",
   "repository": {
     "type": "git",
