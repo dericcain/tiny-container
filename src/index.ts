@@ -17,7 +17,7 @@ interface Services extends Map<string, ServiceAndDependencies<any>> {
   get<T>(name: string): T;
 }
 
-export default class Container implements IContainer {
+export class Container implements IContainer {
   // All services here will not be instantiated until they are retrieved
   private services: Services;
 

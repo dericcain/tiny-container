@@ -16,6 +16,8 @@
 
 `npm i tiny-container` or `yarn add tiny-container`
 
+Then, you can import it using `import { Container } from 'tiny-container';`
+
 ## Api
 
 The `Container` has three instance methods available. This means that the `Container` has to
@@ -126,7 +128,7 @@ The first thing you need to do is create the container:
 `src/bootstrap.js`
 
 ```js
-import Container from 'tiny-container';
+import { Container } from 'tiny-container';
 
 import ApiService from '../services/api';
 import FileService from '../services/file';
@@ -189,7 +191,7 @@ Since the names of the services are important, it is a good idea to use an expor
 `enum` with the names:
 
 ```js
-import Container from 'tiny-container';
+import { Container } from 'tiny-container';
 
 import ApiService from '../services/api';
 import FileService from '../services/file';
@@ -214,7 +216,7 @@ export default container;
 In Typescript:
 
 ```typescript
-import Container from 'tiny-container';
+import { Container } from 'tiny-container';
 
 import ApiService from '../services/api';
 import FileService from '../services/file';
@@ -258,7 +260,7 @@ export default class ApiService {
 `src/bootstrap.js`
 
 ```js
-import Container from 'tiny-container';
+import { Container } from 'tiny-container';
 
 import ApiService from '../services/api';
 import UserStore from './stores/user';
